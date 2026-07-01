@@ -27,9 +27,9 @@ SELECT DISTINCT ON (channel_id)
         WHEN channel_code IN ('ATM', 'TELLER', 'EDC') THEN 'PHYSICAL'
         WHEN channel_code IN ('MB', 'IB', 'CS') THEN 'DIGITAL'
         ELSE NULL
-    END AS channel_category
+    END AS channel_category,
     CASE
-        WHEN channel_category = 'DIGITAL' THEN 'True' ELSE 'False'
+        WHEN channel_category = 'DIGITAL' THEN True ELSE False
     END AS is_digital,
     description
 FROM stg_channels

@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS stg_branches (
 
 CREATE TABLE IF NOT EXISTS dim_branches (
     branch_id       INTEGER PRIMARY KEY NOT NULL,
-    branch_code     VARCHAR(20) UNIQUE,
+    branch_code     VARCHAR(20),
     branch_name     VARCHAR(150),
     city            VARCHAR(100),
     province        VARCHAR(100),

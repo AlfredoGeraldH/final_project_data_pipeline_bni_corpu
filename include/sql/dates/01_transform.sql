@@ -14,14 +14,19 @@ INSERT INTO dim_dates (
     is_weekend,
     is_holiday
 )
-SELECT DISTINCT ON (full_date)
-    CAST(TO_CHAR(full_date, 'YYYYMMDD') AS INTEGER) AS date_id,
-    full_date,
-    EXTRACT(YEAR FROM full_date)::INT AS year,
-    EXTRACT(QUARTER FROM full_date)::INT AS quarter,
-    EXTRACT(MONTH FROM full_date)::INT AS month,
+SELECT DISTINCT ON (full_date::DATE)
 
-    CASE EXTRACT(MONTH FROM full_date)
+    CAST(TO_CHAR(full_date::DATE, 'YYYYMMDD') AS INTEGER) AS date_id,
+
+    full_date::DATE,
+
+    EXTRACT(YEAR FROM full_date::DATE)::INT,
+
+    EXTRACT(QUARTER FROM full_date::DATE)::INT,
+
+    EXTRACT(MONTH FROM full_date::DATE)::INT,
+
+    CASE EXTRACT(MONTH FROM full_date::DATE)
         WHEN 1 THEN 'Januari'
         WHEN 2 THEN 'Februari'
         WHEN 3 THEN 'Maret'
@@ -34,16 +39,15 @@ SELECT DISTINCT ON (full_date)
         WHEN 10 THEN 'Oktober'
         WHEN 11 THEN 'November'
         WHEN 12 THEN 'Desember'
-    END AS month_name,
+    END,
 
-    EXTRACT(WEEK FROM full_date)::INT AS week_of_year,
+    EXTRACT(WEEK FROM full_date::DATE)::INT,
 
-    EXTRACT(DAY FROM full_date)::INT AS day_of_month,
+    EXTRACT(DAY FROM full_date::DATE)::INT,
 
-    -- Monday = 1 ... Sunday = 7
-    EXTRACT(ISODOW FROM full_date)::INT AS day_of_week,
+    EXTRACT(ISODOW FROM full_date::DATE)::INT,
 
-    CASE EXTRACT(ISODOW FROM full_date)
+    CASE EXTRACT(ISODOW FROM full_date::DATE)
         WHEN 1 THEN 'Senin'
         WHEN 2 THEN 'Selasa'
         WHEN 3 THEN 'Rabu'
@@ -51,16 +55,18 @@ SELECT DISTINCT ON (full_date)
         WHEN 5 THEN 'Jumat'
         WHEN 6 THEN 'Sabtu'
         WHEN 7 THEN 'Minggu'
-    END AS day_name,
+    END,
 
     CASE 
-        WHEN EXTRACT(ISODOW FROM full_date) IN (6,7)
+        WHEN EXTRACT(ISODOW FROM full_date::DATE) IN (6,7)
         THEN TRUE
         ELSE FALSE
-    END AS is_weekend,
+    END,
 
-    FALSE AS is_holiday
+    FALSE
 
 FROM stg_dates
+
 WHERE full_date IS NOT NULL
-ORDER BY full_date;
+
+ORDER BY full_date::DATE;

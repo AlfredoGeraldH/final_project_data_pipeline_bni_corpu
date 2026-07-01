@@ -39,13 +39,13 @@ CREATE TABLE IF NOT EXISTS stg_accounts (
     close_date      VARCHAR(20),
     status          VARCHAR(20),
     interest_rate   VARCHAR(20),
-    customer_id     VARCHAR(20),
-    branch_id       VARCHAR(20)
+    customer_id     INTEGER,
+    branch_id       INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS dim_accounts (
-    account_id      INTEGER PRIMARY KEY IS NOT NULL,
-    account_no      INTEGER(20) UNIQUE,
+    account_id      INTEGER PRIMARY KEY NOT NULL,
+    account_no      VARCHAR(20) UNIQUE,
     account_type    VARCHAR(150),
     product_name    VARCHAR(100),
     currency        VARCHAR(100),
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS dim_accounts (
     branch_id       INTEGER,
     CONSTRAINT fk_branch
     FOREIGN KEY (branch_id)
-    REFERENCES dim_customers(branch_id)
+    REFERENCES dim_branches(branch_id)
 );
 """
 
